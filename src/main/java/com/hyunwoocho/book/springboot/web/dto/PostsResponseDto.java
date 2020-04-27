@@ -1,6 +1,7 @@
 package com.hyunwoocho.book.springboot.web.dto;
 
 import com.hyunwoocho.book.springboot.domain.posts.Posts;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter

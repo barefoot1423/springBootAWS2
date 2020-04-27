@@ -2,6 +2,7 @@ package com.hyunwoocho.book.springboot.web;
 
 import com.hyunwoocho.book.springboot.domain.posts.Posts;
 import com.hyunwoocho.book.springboot.domain.posts.PostsRepository;
+import com.hyunwoocho.book.springboot.web.dto.PostsResponseDto;
 import com.hyunwoocho.book.springboot.web.dto.PostsSaveRequestDto;
 import com.hyunwoocho.book.springboot.web.dto.PostsUpdateRequestDto;
 import org.assertj.core.api.Assertions;
@@ -91,6 +92,26 @@ public class PostsApiControllerTest {
         List<Posts> all = postsRepository.findAll();
         Assertions.assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
         Assertions.assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
+    }
+
+    @Test
+    public void Posts_조회된다() throws Exception {
+
+        Posts requestDto =  postsRepository.save(Posts.builder()
+            .title("title33")
+            .content("content33")
+            .author("author")
+            .build());
+
+        String url = "http://localhost:" + port + "/api/v1/posts/" + requestDto.getId();
+
+        ResponseEntity<PostsResponseDto> responseEntity = restTemplate.getForEntity(url, PostsResponseDto.class);
+
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        List<Posts> all = postsRepository.findAll();
+        Assertions.assertThat(all.get(0).getTitle()).isEqualTo("title33");
+        Assertions.assertThat(all.get(0).getContent()).isEqualTo("content33");
     }
 
 }
